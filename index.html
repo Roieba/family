@@ -85,6 +85,13 @@
       color: #003c3c;
     }
 
+    .footer-message {
+      text-align: center;
+      margin-top: 30px;
+      font-size: 1.1em;
+      color: #444;
+    }
+
     #sendWhatsapp {
       margin-top: 20px;
       padding: 12px 16px;
@@ -110,13 +117,6 @@
       width: 22px;
       height: 22px;
       fill: white;
-    }
-
-    .footer-message {
-      text-align: center;
-      margin-top: 30px;
-      font-size: 1.1em;
-      color: #444;
     }
 
     @media (max-width: 600px) {
@@ -201,18 +201,18 @@
       const fundingPercent = parseInt(fundingInput.value) || 0;
       const participants = getParticipantCount() || 1;
 
-      const baseCost = price * nights;
+      const totalVilla = price * nights;
       const shopping = includeShoppingCheckbox.checked ? parseFloat(shoppingAmountInput.value) || 0 : 0;
-      const total = baseCost + shopping;
-      const funding = total * (fundingPercent / 100);
-      const remaining = total - funding;
-      const perFamily = remaining / participants;
+      const funding = (totalVilla * (fundingPercent / 100)) + shopping;
+      const remaining = totalVilla - funding;
+      const perFamily = Math.max(remaining / participants, 0);
 
       fundingLabel.innerText = fundingPercent + "%";
 
       resultDiv.innerHTML = `
-        <strong>סה"כ עלות:</strong> ${total.toLocaleString()} ש"ח<br/>
-        <strong>סכום מימון:</strong> ${funding.toLocaleString()} ש"ח<br/>
+        <strong>סה"כ עלות לינה:</strong> ${totalVilla.toLocaleString()} ש"ח<br/>
+        <strong>השתתפות בקניות:</strong> ${includeShoppingCheckbox.checked ? shopping.toLocaleString() : '0'} ש"ח<br/>
+        <strong>סכום מימון כולל:</strong> ${funding.toLocaleString()} ש"ח<br/>
         <strong>סה"כ השתתפות עצמית (למשפחה):</strong> ${perFamily.toFixed(1).toLocaleString()} ש"ח
       `;
     }
@@ -222,16 +222,16 @@
       const nights = parseInt(nightsInput.value) || 1;
       const fundingPercent = parseInt(fundingInput.value) || 0;
       const participants = getParticipantCount() || 1;
+      const totalVilla = price * nights;
       const shopping = includeShoppingCheckbox.checked ? parseFloat(shoppingAmountInput.value) || 0 : 0;
-      const total = (price * nights) + shopping;
-      const funding = total * (fundingPercent / 100);
-      const perFamily = (total - funding) / participants;
+      const funding = (totalVilla * (fundingPercent / 100)) + shopping;
+      const perFamily = Math.max((totalVilla - funding) / participants, 0);
 
       const message =
         `🧮 חישוב נופש - משפחת בן-אברהם:\n` +
-        `🏨 סה"כ עלות: ${total.toLocaleString()} ש"ח\n` +
-        `💰 סכום מימון (${fundingPercent}%): ${funding.toLocaleString()} ש"ח\n` +
-        `🛒 סכום קניות: ${shopping.toLocaleString()} ש"ח\n` +
+        `🏨 סה"כ עלות לינה: ${totalVilla.toLocaleString()} ש"ח\n` +
+        `🛒 השתתפות בקניות: ${includeShoppingCheckbox.checked ? shopping.toLocaleString() : '0'} ש"ח\n` +
+        `💰 סכום מימון כולל: ${funding.toLocaleString()} ש"ח\n` +
         `👨‍👩‍👧‍👦 סה"כ משתתפים: ${participants}\n` +
         `🎯 סה"כ השתתפות עצמית (למשפחה): ${perFamily.toFixed(1).toLocaleString()} ש"ח`;
 
