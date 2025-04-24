@@ -143,7 +143,7 @@
       <label><input type="checkbox" checked /> נתנאל ומיכל</label>
       <label><input type="checkbox" checked /> נוריאל ואפרת</label>
     </div>
-    <div id="participantsCount">סה"כ משתתפים: 6</div>
+    <div id="participantsCount">סה"כ משתתפים: כולם</div>
 
     <label>מחיר ללילה (ש"ח):</label>
     <input type="number" id="price" value="5000" min="0" />
@@ -192,7 +192,7 @@
 
     function updateParticipantDisplay() {
       const count = getParticipantCount();
-      participantsCount.innerText = `סה"כ משתתפים: ${count}`;
+      participantsCount.innerText = count === 6 ? 'סה"כ משתתפים: כולם' : `סה"כ משתתפים: ${count}`;
     }
 
     function calculate() {
@@ -210,10 +210,10 @@
       fundingLabel.innerText = fundingPercent + "%";
 
       resultDiv.innerHTML = `
-        <strong>סה"כ עלות לינה:</strong> ${totalVilla.toLocaleString()} ש"ח<br/>
-        <strong>השתתפות בקניות:</strong> ${includeShoppingCheckbox.checked ? shopping.toLocaleString() : '0'} ש"ח<br/>
-        <strong>סכום מימון כולל:</strong> ${funding.toLocaleString()} ש"ח<br/>
-        <strong>סה"כ השתתפות עצמית (למשפחה):</strong> ${perFamily.toFixed(1).toLocaleString()} ש"ח
+        <strong>סה\"כ עלות לינה:</strong> ${totalVilla.toLocaleString()} ש\"ח<br/>
+        <strong>סה\"כ קניות:</strong> ${includeShoppingCheckbox.checked ? shopping.toLocaleString() : '0'} ש\"ח<br/>
+        <strong>סכום מימון כולל:</strong> ${funding.toLocaleString()} ש\"ח<br/>
+        <strong>סה\"כ השתתפות עצמית (למשפחה):</strong> ${perFamily.toFixed(1).toLocaleString()} ש\"ח
       `;
     }
 
@@ -228,12 +228,17 @@
       const perFamily = Math.max((totalVilla - funding) / participants, 0);
 
       const message =
-        `🧮 חישוב נופש - משפחת בן-אברהם:\n` +
-        `🏨 סה"כ עלות לינה: ${totalVilla.toLocaleString()} ש"ח\n` +
-        `🛒 השתתפות בקניות: ${includeShoppingCheckbox.checked ? shopping.toLocaleString() : '0'} ש"ח\n` +
-        `💰 סכום מימון כולל: ${funding.toLocaleString()} ש"ח\n` +
-        `👨‍👩‍👧‍👦 סה"כ משתתפים: ${participants}\n` +
-        `🎯 סה"כ השתתפות עצמית (למשפחה): ${perFamily.toFixed(1).toLocaleString()} ש"ח`;
+        `🧰 חישוב נופש - משפחת בן-אברהם:
+` +
+        `🏨 סה\"כ עלות לינה: ${totalVilla.toLocaleString()} ש\"ח
+` +
+        `🥒 סה\"כ קניות: ${includeShoppingCheckbox.checked ? shopping.toLocaleString() : '0'} ש\"ח
+` +
+        `💰 סכום מימון כולל: ${funding.toLocaleString()} ש\"ח
+` +
+        `👨‍👩‍👧‍👦 סה\"כ משתתפים: ${participants === 6 ? "כולם" : participants}
+` +
+        `🎯 סה\"כ השתתפות עצמית (למשפחה): ${perFamily.toFixed(1).toLocaleString()} ש\"ח`;
 
       const url = "https://api.whatsapp.com/send?text=" + encodeURIComponent(message);
       window.open(url, "_blank");
