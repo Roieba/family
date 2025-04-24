@@ -112,6 +112,13 @@
       fill: white;
     }
 
+    .footer-message {
+      text-align: center;
+      margin-top: 30px;
+      font-size: 1.1em;
+      color: #444;
+    }
+
     @media (max-width: 600px) {
       body {
         padding: 10px;
@@ -139,10 +146,10 @@
     <div id="participantsCount">סה"כ משתתפים: 6</div>
 
     <label>מחיר ללילה (ש"ח):</label>
-    <input type="number" id="price" value="1000" min="0" />
+    <input type="number" id="price" value="5000" min="0" />
 
     <label>מספר לילות:</label>
-    <input type="number" id="nights" value="1" min="1" max="30" />
+    <input type="number" id="nights" value="2" min="1" max="30" />
 
     <label>אחוז מימון:</label>
     <input type="range" id="funding" min="1" max="100" value="50" />
@@ -155,6 +162,8 @@
     </div>
 
     <div id="result"></div>
+
+    <p class="footer-message">מקווים לראות את כולם בחיוך 🌞</p>
 
     <button id="sendWhatsapp">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
@@ -173,7 +182,6 @@
     const sendBtn = document.getElementById("sendWhatsapp");
     const checkboxes = document.querySelectorAll("#families input[type=checkbox]");
     const participantsCount = document.getElementById("participantsCount");
-
     const includeShoppingCheckbox = document.getElementById("includeShopping");
     const shoppingAmountInput = document.getElementById("shoppingAmount");
     const shoppingAmountWrapper = document.getElementById("shoppingAmountWrapper");
@@ -194,9 +202,7 @@
       const participants = getParticipantCount() || 1;
 
       const baseCost = price * nights;
-      const shopping = includeShoppingCheckbox.checked
-        ? parseFloat(shoppingAmountInput.value) || 0
-        : 0;
+      const shopping = includeShoppingCheckbox.checked ? parseFloat(shoppingAmountInput.value) || 0 : 0;
       const total = baseCost + shopping;
       const funding = total * (fundingPercent / 100);
       const remaining = total - funding;
@@ -207,7 +213,7 @@
       resultDiv.innerHTML = `
         <strong>סה"כ עלות:</strong> ${total.toLocaleString()} ש"ח<br/>
         <strong>סכום מימון:</strong> ${funding.toLocaleString()} ש"ח<br/>
-        <strong>סה"כ השתתפות עצמית (למשתתף):</strong> ${perFamily.toFixed(1).toLocaleString()} ש"ח
+        <strong>סה"כ השתתפות עצמית (למשפחה):</strong> ${perFamily.toFixed(1).toLocaleString()} ש"ח
       `;
     }
 
@@ -216,10 +222,7 @@
       const nights = parseInt(nightsInput.value) || 1;
       const fundingPercent = parseInt(fundingInput.value) || 0;
       const participants = getParticipantCount() || 1;
-      const shopping = includeShoppingCheckbox.checked
-        ? parseFloat(shoppingAmountInput.value) || 0
-        : 0;
-
+      const shopping = includeShoppingCheckbox.checked ? parseFloat(shoppingAmountInput.value) || 0 : 0;
       const total = (price * nights) + shopping;
       const funding = total * (fundingPercent / 100);
       const perFamily = (total - funding) / participants;
@@ -230,7 +233,7 @@
         `💰 סכום מימון (${fundingPercent}%): ${funding.toLocaleString()} ש"ח\n` +
         `🛒 סכום קניות: ${shopping.toLocaleString()} ש"ח\n` +
         `👨‍👩‍👧‍👦 סה"כ משתתפים: ${participants}\n` +
-        `🎯 סה"כ השתתפות עצמית (למשתתף): ${perFamily.toFixed(1).toLocaleString()} ש"ח`;
+        `🎯 סה"כ השתתפות עצמית (למשפחה): ${perFamily.toFixed(1).toLocaleString()} ש"ח`;
 
       const url = "https://api.whatsapp.com/send?text=" + encodeURIComponent(message);
       window.open(url, "_blank");
@@ -240,10 +243,12 @@
     nightsInput.addEventListener("input", calculate);
     fundingInput.addEventListener("input", calculate);
     shoppingAmountInput.addEventListener("input", calculate);
+
     checkboxes.forEach(cb => cb.addEventListener("change", () => {
       updateParticipantDisplay();
       calculate();
     }));
+
     includeShoppingCheckbox.addEventListener("change", () => {
       shoppingAmountWrapper.style.display = includeShoppingCheckbox.checked ? "block" : "none";
       calculate();
