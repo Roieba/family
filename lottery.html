@@ -2,7 +2,7 @@
 <html lang="he" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <title>הגרלת תורנים - משפחת בן-אברהם</title>
+  <title>הגרלת כלים - משפחת בן-אברהם</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
     body {
@@ -56,7 +56,7 @@
   </style>
 </head>
 <body>
-  <h1>🎲 מי התורנים היום?</h1>
+  <h1>🎲 מי שוטף כלים היום?</h1>
 
   <button onclick="chooseRandom()">הגרל!</button>
 
@@ -79,4 +79,11 @@
       button.classList.add("bouncing");
 
       setTimeout(() => {
-        const chosen = families[Math.floor(Math.random() * families.length*
+        const chosen = families[Math.floor(Math.random() * families.length)];
+        result.innerHTML = `🧼 <strong>${chosen}</strong> שוטפים כלים היום! 🍽️`;
+        button.classList.remove("bouncing");
+      }, 1200);
+    }
+  </script>
+</body>
+</html>
