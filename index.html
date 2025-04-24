@@ -1,179 +1,182 @@
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <title>מחשבון נופש</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <style>
-        body {
-            font-family: "Segoe UI", sans-serif;
-            background: linear-gradient(to bottom, #dff6f0, #fff9e6);
-            padding: 20px;
-            margin: 0;
-        }
+  <meta charset="UTF-8">
+  <title>מחשבון נופש</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/869/869636.png">
+  <style>
+    body {
+      font-family: "Segoe UI", sans-serif;
+      background: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1350&q=80') no-repeat center center fixed;
+      background-size: cover;
+      padding: 20px;
+      margin: 0;
+    }
 
-        .container {
-            max-width: 480px;
-            margin: 0 auto;
-            background-color: white;
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
+    .container {
+      max-width: 480px;
+      margin: 0 auto;
+      background-color: rgba(255, 255, 255, 0.95);
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+    }
 
-        h2 {
-            text-align: center;
-            color: #006d77;
-            margin-bottom: 20px;
-        }
+    h2 {
+      text-align: center;
+      color: #006d77;
+      margin-bottom: 20px;
+    }
 
-        label {
-            display: block;
-            margin-top: 15px;
-            font-weight: bold;
-            color: #333;
-        }
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+      color: #333;
+    }
 
-        input[type="number"],
-        input[type="range"] {
-            width: 100%;
-            padding: 8px;
-            font-size: 1em;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            margin-top: 5px;
-        }
+    input[type="number"],
+    input[type="range"] {
+      width: 100%;
+      padding: 8px;
+      font-size: 1em;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      margin-top: 5px;
+    }
 
-        #fundingValue {
-            display: inline-block;
-            margin-top: 5px;
-            font-size: 1em;
-            color: #555;
-        }
+    #fundingValue {
+      display: inline-block;
+      margin-top: 5px;
+      font-size: 1em;
+      color: #555;
+    }
 
-        #result {
-            margin-top: 25px;
-            background: #f0fbf9;
-            padding: 15px;
-            border: 1px solid #cdeae3;
-            border-radius: 8px;
-            line-height: 1.8;
-            font-size: 1.1em;
-            color: #003c3c;
-        }
+    #result {
+      margin-top: 25px;
+      background: #f0fbf9;
+      padding: 15px;
+      border: 1px solid #cdeae3;
+      border-radius: 8px;
+      line-height: 1.8;
+      font-size: 1.1em;
+      color: #003c3c;
+    }
 
-        #sendWhatsapp {
-            margin-top: 20px;
-            padding: 12px 16px;
-            background-color: #25d366;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 1.1em;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            justify-content: center;
-            cursor: pointer;
-            width: 100%;
-            transition: background-color 0.3s ease;
-        }
+    #sendWhatsapp {
+      margin-top: 20px;
+      padding: 12px 16px;
+      background-color: #25d366;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1.1em;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      justify-content: center;
+      cursor: pointer;
+      width: 100%;
+      transition: background-color 0.3s ease;
+    }
 
-        #sendWhatsapp:hover {
-            background-color: #20b958;
-        }
+    #sendWhatsapp:hover {
+      background-color: #20b958;
+    }
 
-        #sendWhatsapp svg {
-            width: 22px;
-            height: 22px;
-            fill: white;
-        }
+    #sendWhatsapp svg {
+      width: 22px;
+      height: 22px;
+      fill: white;
+    }
 
-        @media (max-width: 600px) {
-            body {
-                padding: 10px;
-            }
-            .container {
-                padding: 20px;
-            }
-        }
-    </style>
+    @media (max-width: 600px) {
+      body {
+        padding: 10px;
+      }
+
+      .container {
+        padding: 20px;
+      }
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h2>מחשבון נופש ל-6 משפחות</h2>
+  <div class="container">
+    <h2>מחשבון נופש ל-6 משפחות</h2>
 
-        <label>מחיר ללילה (ש"ח):</label>
-        <input type="number" id="price" value="1000" min="0" />
+    <label>מחיר ללילה (ש"ח):</label>
+    <input type="number" id="price" value="1000" min="0" />
 
-        <label>מספר לילות:</label>
-        <input type="number" id="nights" value="1" min="1" max="30" />
+    <label>מספר לילות:</label>
+    <input type="number" id="nights" value="1" min="1" max="30" />
 
-        <label>אחוז מימון:</label>
-        <input type="range" id="funding" min="1" max="100" value="50" />
-        <span id="fundingValue">50%</span>
+    <label>אחוז מימון:</label>
+    <input type="range" id="funding" min="1" max="100" value="50" />
+    <span id="fundingValue">50%</span>
 
-        <div id="result"></div>
+    <div id="result"></div>
 
-        <button id="sendWhatsapp">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                <path d="M380.9 97.1C339-2.3 239.5-31.6 159.6 9.5 97.4 41.6 64 106.8 64 176c0 19.7 3.5 38.7 10.3 56.4L33.1 443l211.6-55.6c17.3 5.9 35.8 8.9 54.3 8.9 93.7 0 176-64.7 196.6-152.4 20.6-87.6-23.5-174.4-114.7-207.8zM224 352c-25.1 0-49.8-7.2-70.8-20.8L94 352l17.1-59.2c-11.7-20.7-17.8-44.4-17.8-68.8 0-88.4 83.6-159.4 175.5-126.6 66.4 23.6 107.2 97.3 83.6 163.7-18.6 52.4-67.7 89.9-123.4 89.9z"/>
-            </svg>
-            שלח לוואטסאפ
-        </button>
-    </div>
+    <button id="sendWhatsapp">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+        <path d="M380.9 97.1C339-2.3 239.5-31.6 159.6 9.5 97.4 41.6 64 106.8 64 176c0 19.7 3.5 38.7 10.3 56.4L33.1 443l211.6-55.6c17.3 5.9 35.8 8.9 54.3 8.9 93.7 0 176-64.7 196.6-152.4 20.6-87.6-23.5-174.4-114.7-207.8zM224 352c-25.1 0-49.8-7.2-70.8-20.8L94 352l17.1-59.2c-11.7-20.7-17.8-44.4-17.8-68.8 0-88.4 83.6-159.4 175.5-126.6 66.4 23.6 107.2 97.3 83.6 163.7-18.6 52.4-67.7 89.9-123.4 89.9z"/>
+      </svg>
+      שלח לוואטסאפ
+    </button>
+  </div>
 
-    <script>
-        const priceInput = document.getElementById("price");
-        const nightsInput = document.getElementById("nights");
-        const fundingInput = document.getElementById("funding");
-        const fundingLabel = document.getElementById("fundingValue");
-        const resultDiv = document.getElementById("result");
-        const sendBtn = document.getElementById("sendWhatsapp");
+  <script>
+    const priceInput = document.getElementById("price");
+    const nightsInput = document.getElementById("nights");
+    const fundingInput = document.getElementById("funding");
+    const fundingLabel = document.getElementById("fundingValue");
+    const resultDiv = document.getElementById("result");
+    const sendBtn = document.getElementById("sendWhatsapp");
 
-        function calculate() {
-            const price = parseFloat(priceInput.value) || 0;
-            const nights = parseInt(nightsInput.value) || 1;
-            const fundingPercent = parseInt(fundingInput.value) || 0;
+    function calculate() {
+      const price = parseFloat(priceInput.value) || 0;
+      const nights = parseInt(nightsInput.value) || 1;
+      const fundingPercent = parseInt(fundingInput.value) || 0;
 
-            const total = price * nights;
-            const funding = total * (fundingPercent / 100);
-            const remaining = total - funding;
-            const perFamily = remaining / 6;
+      const total = price * nights;
+      const funding = total * (fundingPercent / 100);
+      const remaining = total - funding;
+      const perFamily = remaining / 6;
 
-            fundingLabel.innerText = fundingPercent + "%";
+      fundingLabel.innerText = fundingPercent + "%";
 
-            resultDiv.innerHTML = `
-                <strong>סה"כ עלות:</strong> ${total.toLocaleString()} ש"ח<br/>
-                <strong>סכום מימון:</strong> ${funding.toLocaleString()} ש"ח<br/>
-                <strong>סה"כ השתתפות עצמית (למשפחה):</strong> ${perFamily.toFixed(1).toLocaleString()} ש"ח
-            `;
-        }
+      resultDiv.innerHTML = `
+        <strong>סה"כ עלות:</strong> ${total.toLocaleString()} ש"ח<br/>
+        <strong>סכום מימון:</strong> ${funding.toLocaleString()} ש"ח<br/>
+        <strong>סה"כ השתתפות עצמית (למשפחה):</strong> ${perFamily.toFixed(1).toLocaleString()} ש"ח
+      `;
+    }
 
-        sendBtn.addEventListener("click", function () {
-            const price = parseFloat(priceInput.value) || 0;
-            const nights = parseInt(nightsInput.value) || 1;
-            const fundingPercent = parseInt(fundingInput.value) || 0;
+    sendBtn.addEventListener("click", function () {
+      const price = parseFloat(priceInput.value) || 0;
+      const nights = parseInt(nightsInput.value) || 1;
+      const fundingPercent = parseInt(fundingInput.value) || 0;
 
-            const total = price * nights;
-            const funding = total * (fundingPercent / 100);
-            const perFamily = (total - funding) / 6;
+      const total = price * nights;
+      const funding = total * (fundingPercent / 100);
+      const perFamily = (total - funding) / 6;
 
-            const message =
-                `🧮 חישוב נופש ל-6 משפחות:\n` +
-                `🏨 סה"כ עלות: ${total.toLocaleString()} ש"ח\n` +
-                `💰 סכום מימון (${fundingPercent}%): ${funding.toLocaleString()} ש"ח\n` +
-                `👨‍👩‍👧‍👦 סה"כ השתתפות עצמית (למשפחה): ${perFamily.toFixed(1).toLocaleString()} ש"ח`;
+      const message =
+        `🧮 חישוב נופש ל-6 משפחות:\n` +
+        `🏨 סה"כ עלות: ${total.toLocaleString()} ש"ח\n` +
+        `💰 סכום מימון (${fundingPercent}%): ${funding.toLocaleString()} ש"ח\n` +
+        `👨‍👩‍👧‍👦 סה"כ השתתפות עצמית (למשפחה): ${perFamily.toFixed(1).toLocaleString()} ש"ח`;
 
-            const url = "https://api.whatsapp.com/send?text=" + encodeURIComponent(message);
-            window.open(url, "_blank");
-        });
+      const url = "https://api.whatsapp.com/send?text=" + encodeURIComponent(message);
+      window.open(url, "_blank");
+    });
 
-        priceInput.addEventListener("input", calculate);
-        nightsInput.addEventListener("input", calculate);
-        fundingInput.addEventListener("input", calculate);
+    priceInput.addEventListener("input", calculate);
+    nightsInput.addEventListener("input", calculate);
+    fundingInput.addEventListener("input", calculate);
 
-        calculate();
-    </script>
+    calculate();
+  </script>
 </body>
 </html>
