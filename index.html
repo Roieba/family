@@ -26,7 +26,21 @@
     h2 {
       text-align: center;
       color: #006d77;
+      margin-bottom: 10px;
+    }
+
+    #countdown {
+      text-align: center;
+      font-size: 1.2em;
       margin-bottom: 20px;
+      color: #ff5722;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
     }
 
     label {
@@ -132,7 +146,9 @@
 </head>
 <body>
   <div class="container">
+	בס"ד
     <h2>מחשבון נופש - משפחת בן-אברהם</h2>
+    <div id="countdown"></div>
 
     <label>משתתפים:</label>
     <div class="checkboxes" id="families">
@@ -163,7 +179,7 @@
 
     <div id="result"></div>
 
-    <p class="footer-message">מקווים לראות את כולם בחיוך 🌞</p>
+    <p class="footer-message">!מקווים לראות את כולם בחיוך 🌞</p>
 
     <button id="sendWhatsapp">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
@@ -263,5 +279,28 @@
     updateParticipantDisplay();
     calculate();
   </script>
+
+<script>
+  function updateCountdown() {
+    const targetDate = new Date("2025-08-10T00:00:00");
+    const now = new Date();
+    const diffTime = targetDate - now;
+    const diffDays = Math.max(Math.ceil(diffTime / (1000 * 60 * 60 * 24)), 0);
+
+    let text = "";
+    if (diffDays === 0) {
+      text = "הנופש מתחיל היום! 🎉";
+    } else if (diffDays === 1) {
+      text = "עוד יום אחד לנופש 🌞";
+    } else {
+      text = `עוד ${diffDays} ימים לנופש 🌞`;
+    }
+    document.getElementById("countdown").textContent = text;
+  }
+
+  updateCountdown();
+  setInterval(updateCountdown, 1000 * 60 * 60); // עדכון כל שעה
+</script>
+
 </body>
 </html>
