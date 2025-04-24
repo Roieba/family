@@ -1,0 +1,16 @@
+{
+  "name": "מחשבון נופש - משפחת בן-אברהם",
+  "short_name": "נופש בן-אברהם",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#006d77",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/869/869636.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "lang": "he"
+}
