@@ -180,7 +180,7 @@
 
     <div id="result"></div>
 
-    <p class="footer-message">מקווים לראות את כולם בחיוך! 🌞</p>
+    <p class="footer-message">!מקווים לראות את כולם בחיוך 🌞</p>
 
     <button id="sendWhatsapp">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
@@ -188,6 +188,19 @@
       </svg>
       שלח לוואטסאפ
     </button>
+
+    <button id="randomDish" style="margin-top: 10px; width: 100%; padding: 10px; font-size: 1em;">
+  🧽 מי שוטף כלים היום?
+</button>
+    
+    <button id="openChecklist" style="margin-top: 10px; width: 100%; padding: 10px; font-size: 1em;">
+  📋 רשימת ציוד
+</button>
+
+
+
+<div id="dishResult" style="text-align:center; font-size:1.2em; margin-top:15px;"></div>
+
   </div>
 
   <script>
@@ -303,5 +316,33 @@
   setInterval(updateCountdown, 1000 * 60 * 60); // עדכון כל שעה
 </script>
 
+<script>
+// כפתור לרשימת הציוד
+document.getElementById("openChecklist").addEventListener("click", () => {
+  window.open("checklist.html", "_blank");
+});
+
+// כפתור מי שוטף כלים
+document.getElementById("randomDish").addEventListener("click", () => {
+  const families = Array.from(document.querySelectorAll("#families input[type=checkbox]"))
+    .filter(cb => cb.checked)
+    .map(cb => cb.parentElement.textContent.trim());
+
+  if (families.length === 0) {
+    document.getElementById("dishResult").textContent = "אין משתתפים רשומים 😅";
+    return;
+  }
+
+  const chosen = families[Math.floor(Math.random() * families.length)];
+
+  // אנימציה מצחיקה של בחירה
+  const dishResult = document.getElementById("dishResult");
+  dishResult.innerHTML = "🎲 מגריל...";
+  setTimeout(() => {
+    dishResult.innerHTML = `🍽️ <strong>${chosen}</strong> שוטפים כלים היום! 🎉`;
+  }, 1000);
+});
+</script>
+  
 </body>
 </html>
