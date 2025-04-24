@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>הגרלת תורנים - משפחת בן-אברהם</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      font-family: "Segoe UI", sans-serif;
+      background: linear-gradient(to bottom, #fceabb, #f8b500);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+      padding: 40px 20px;
+      margin: 0;
+    }
+
+    h1 {
+      color: #6d4c41;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    button {
+      padding: 15px 30px;
+      font-size: 1.2em;
+      background-color: #795548;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #5d4037;
+    }
+
+    #result {
+      margin-top: 30px;
+      font-size: 1.4em;
+      text-align: center;
+      color: #4e342e;
+    }
+
+    .bouncing {
+      animation: bounce 0.6s ease infinite alternate;
+    }
+
+    @keyframes bounce {
+      from { transform: scale(1); }
+      to   { transform: scale(1.1); }
+    }
+  </style>
+</head>
+<body>
+  <h1>🎲 מי התורנים היום?</h1>
+
+  <button onclick="chooseRandom()">הגרל!</button>
+
+  <div id="result"></div>
+
+  <script>
+    const families = [
+      "רועי וקרנית",
+      "איתי ואביגיל",
+      "הדס ויצחק",
+      "נועם ומור",
+      "נתנאל ומיכל",
+      "נוריאל ואפרת"
+    ];
+
+    function chooseRandom() {
+      const button = document.querySelector("button");
+      const result = document.getElementById("result");
+      result.textContent = "🎲 מגרילים...";
+      button.classList.add("bouncing");
+
+      setTimeout(() => {
+        const chosen = families[Math.floor(Math.random() * families.length*
