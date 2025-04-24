@@ -8,36 +8,49 @@
   <style>
     body {
       font-family: "Segoe UI", sans-serif;
-      background: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1350&q=80') no-repeat center center fixed;
-      background-size: cover;
-      padding: 20px;
       margin: 0;
+      padding: 0;
+      background: linear-gradient(270deg, #cceeff, #e0f7fa);
+      background-size: 400% 400%;
+      animation: beachBreathe 15s ease infinite;
+    }
+
+    @keyframes beachBreathe {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
     }
 
     .container {
       max-width: 480px;
-      margin: 0 auto;
+      margin: 40px auto;
       background-color: rgba(255, 255, 255, 0.95);
       padding: 25px;
       border-radius: 15px;
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
     }
 
+    .header-image {
+      width: 100%;
+      border-radius: 12px;
+      margin-bottom: 20px;
+    }
+
     h2 {
       text-align: center;
       color: #006d77;
-      margin-bottom: 20px;
+      margin-bottom: 15px;
     }
 
     label {
       display: block;
       margin-top: 15px;
       font-weight: bold;
-      color: #333;
     }
 
     input[type="number"],
-    input[type="range"] {
+    input[type="range"],
+    input[type="text"] {
       width: 100%;
       padding: 8px;
       font-size: 1em;
@@ -70,57 +83,68 @@
       color: #006d77;
     }
 
+    #foodBudgetContainer {
+      display: none;
+      margin-top: 10px;
+    }
+
     #result {
       margin-top: 25px;
       background: #f0fbf9;
       padding: 15px;
       border: 1px solid #cdeae3;
       border-radius: 8px;
-      line-height: 1.8;
       font-size: 1.1em;
-      color: #003c3c;
     }
 
-    #sendWhatsapp {
-      margin-top: 20px;
-      padding: 12px 16px;
+    #sendWhatsapp, #lotteryButton {
+      margin-top: 15px;
+      padding: 10px 15px;
       background-color: #25d366;
       color: white;
       border: none;
       border-radius: 8px;
-      font-size: 1.1em;
+      font-size: 1em;
       display: flex;
       align-items: center;
       gap: 10px;
       justify-content: center;
       cursor: pointer;
       width: 100%;
-      transition: background-color 0.3s ease;
     }
 
-    #sendWhatsapp:hover {
-      background-color: #20b958;
+    #sendWhatsapp:hover, #lotteryButton:hover {
+      background-color: #1ebe5d;
     }
 
-    #sendWhatsapp svg {
-      width: 22px;
-      height: 22px;
-      fill: white;
+    #messageInput {
+      margin-top: 20px;
+      width: 100%;
+      padding: 8px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 1em;
     }
 
     @media (max-width: 600px) {
-      body {
-        padding: 10px;
-      }
-
       .container {
+        margin: 20px;
         padding: 20px;
       }
     }
   </style>
 </head>
 <body>
+<div id="loginContainer" class="container">
+  <h2>כניסה למחשבון נופש</h2>
+  <label>הכנס סיסמה:</label>
+  <input type="password" id="passwordInput" />
+  <button onclick="checkPassword()">כניסה</button>
+</div>
+
+<div id="mainContent" style="display:none">
   <div class="container">
+    <img src="https://cdn.pixabay.com/photo/2016/11/29/03/53/beach-1867285_1280.jpg" class="header-image" alt="Vacation">
     <h2>מחשבון נופש - משפחת בן-אברהם</h2>
 
     <label>משתתפים:</label>
@@ -135,10 +159,16 @@
     <div id="participantsCount">סה"כ משתתפים: 6</div>
 
     <label>מחיר ללילה (ש"ח):</label>
-    <input type="number" id="price" value="1000" min="0" />
+    <input type="number" id="price" value="1000" />
 
     <label>מספר לילות:</label>
     <input type="number" id="nights" value="1" min="1" max="30" />
+
+    <label><input type="checkbox" id="foodCheckbox" /> לכלול אוכל משותף</label>
+    <div id="foodBudgetContainer">
+      <label>עלות אוכל משותף:</label>
+      <input type="number" id="foodBudget" value="1000" />
+    </div>
 
     <label>אחוז מימון:</label>
     <input type="range" id="funding" min="1" max="100" value="50" />
@@ -146,84 +176,23 @@
 
     <div id="result"></div>
 
-    <button id="sendWhatsapp">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-        <path d="M380.9 97.1C339-2.3 239.5-31.6 159.6 9.5 97.4 41.6 64 106.8 64 176c0 19.7 3.5 38.7 10.3 56.4L33.1 443l211.6-55.6c17.3 5.9 35.8 8.9 54.3 8.9 93.7 0 176-64.7 196.6-152.4 20.6-87.6-23.5-174.4-114.7-207.8zM224 352c-25.1 0-49.8-7.2-70.8-20.8L94 352l17.1-59.2c-11.7-20.7-17.8-44.4-17.8-68.8 0-88.4 83.6-159.4 175.5-126.6 66.4 23.6 107.2 97.3 83.6 163.7-18.6 52.4-67.7 89.9-123.4 89.9z"/>
-      </svg>
-      שלח לוואטסאפ
-    </button>
+    <label>הודעה אישית:</label>
+    <input type="text" id="messageInput" placeholder="מוסיפים משהו אישי..." />
+
+    <button id="sendWhatsapp">שלח לוואטסאפ</button>
+    <button id="lotteryButton">🎁 הגרלה משפחתית</button>
   </div>
-
-  <script>
-    const priceInput = document.getElementById("price");
-    const nightsInput = document.getElementById("nights");
-    const fundingInput = document.getElementById("funding");
-    const fundingLabel = document.getElementById("fundingValue");
-    const resultDiv = document.getElementById("result");
-    const sendBtn = document.getElementById("sendWhatsapp");
-    const checkboxes = document.querySelectorAll("#families input[type=checkbox]");
-    const participantsCount = document.getElementById("participantsCount");
-
-    function getParticipantCount() {
-      return Array.from(checkboxes).filter(cb => cb.checked).length;
+</div>
+<script>
+  const passwordInput = document.getElementById('passwordInput');
+  function checkPassword() {
+    if (passwordInput.value === '52') {
+      document.getElementById('loginContainer').style.display = 'none';
+      document.getElementById('mainContent').style.display = 'block';
+    } else {
+      alert('סיסמה שגויה');
     }
-
-    function updateParticipantDisplay() {
-      const count = getParticipantCount();
-      participantsCount.innerText = `סה"כ משתתפים: ${count}`;
-    }
-
-    function calculate() {
-      const price = parseFloat(priceInput.value) || 0;
-      const nights = parseInt(nightsInput.value) || 1;
-      const fundingPercent = parseInt(fundingInput.value) || 0;
-      const participants = getParticipantCount() || 1;
-
-      const total = price * nights;
-      const funding = total * (fundingPercent / 100);
-      const remaining = total - funding;
-      const perFamily = remaining / participants;
-
-      fundingLabel.innerText = fundingPercent + "%";
-
-      resultDiv.innerHTML = `
-        <strong>סה"כ עלות:</strong> ${total.toLocaleString()} ש"ח<br/>
-        <strong>סכום מימון:</strong> ${funding.toLocaleString()} ש"ח<br/>
-        <strong>סה"כ השתתפות עצמית (למשפחה):</strong> ${perFamily.toFixed(1).toLocaleString()} ש"ח
-      `;
-    }
-
-    sendBtn.addEventListener("click", function () {
-      const price = parseFloat(priceInput.value) || 0;
-      const nights = parseInt(nightsInput.value) || 1;
-      const fundingPercent = parseInt(fundingInput.value) || 0;
-      const participants = getParticipantCount() || 1;
-
-      const total = price * nights;
-      const funding = total * (fundingPercent / 100);
-      const perFamily = (total - funding) / participants;
-
-      const message =
-        `🧮 חישוב נופש - משפחת בן-אברהם:\n` +
-        `🏨 סה"כ עלות: ${total.toLocaleString()} ש"ח\n` +
-        `💰 סכום מימון (${fundingPercent}%): ${funding.toLocaleString()} ש"ח\n` +
-        `👨‍👩‍👧‍👦 סה"כ משתתפים: ${participants}\n` +
-        `🎯 סה"כ השתתפות עצמית (למשפחה): ${perFamily.toFixed(1).toLocaleString()} ש"ח`;
-
-      const url = "https://api.whatsapp.com/send?text=" + encodeURIComponent(message);
-      window.open(url, "_blank");
-    });
-
-    priceInput.addEventListener("input", calculate);
-    nightsInput.addEventListener("input", calculate);
-    fundingInput.addEventListener("input", calculate);
-    checkboxes.forEach(cb => cb.addEventListener("change", () => {
-      updateParticipantDisplay();
-      calculate();
-    }));
-
-    updateParticipantDisplay();
-    calculate();
-  </script>
+  }
+</script>
 </body>
 </html>
