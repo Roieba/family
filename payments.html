@@ -2,10 +2,9 @@
 <html lang="he" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <link rel="manifest" href="manifest.json">
-  <title>מחשבון נופש - משפחת בן-אברהם</title>
+  <title>תשלומים - משפחת בן-אברהם</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/869/869636.png">
+  <link rel="manifest" href="manifest.json">
   <style>
     body {
       font-family: "Segoe UI", sans-serif;
@@ -14,7 +13,6 @@
       padding: 20px;
       margin: 0;
     }
-
     .container {
       max-width: 480px;
       margin: 0 auto;
@@ -23,51 +21,32 @@
       border-radius: 15px;
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
     }
-
     h2 {
       text-align: center;
       color: #006d77;
       margin-bottom: 10px;
     }
-
-    #countdown {
-      text-align: center;
-      font-size: 1.2em;
-      margin-bottom: 20px;
-      color: #ff5722;
-      animation: pulse 2s infinite;
-    }
-
-    @keyframes pulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.05); }
-      100% { transform: scale(1); }
-    }
-
     label {
       display: block;
       margin-top: 15px;
       font-weight: bold;
       color: #333;
     }
-
     input[type="number"],
     input[type="range"] {
-      width: 96%;
+      width: 100%;
       padding: 8px;
       font-size: 1em;
       border: 1px solid #ccc;
       border-radius: 6px;
       margin-top: 5px;
     }
-
     .checkboxes {
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
       margin-top: 10px;
     }
-
     .checkboxes label {
       font-weight: normal;
       background: #f4f4f4;
@@ -78,17 +57,14 @@
       align-items: center;
       gap: 5px;
     }
-
     #participantsCount {
       margin-top: 10px;
       font-size: 1em;
       color: #006d77;
     }
-
     #shoppingAmountWrapper {
       margin-top: 10px;
     }
-
     #result {
       margin-top: 25px;
       background: #f0fbf9;
@@ -99,14 +75,12 @@
       font-size: 1.1em;
       color: #003c3c;
     }
-
     .footer-message {
       text-align: center;
       margin-top: 30px;
       font-size: 1.1em;
       color: #444;
     }
-
     #sendWhatsapp {
       margin-top: 20px;
       padding: 12px 16px;
@@ -119,37 +93,23 @@
       align-items: center;
       gap: 10px;
       justify-content: center;
-      cursor: pointer;נבחרו להיות התורנים הראשיים
+      cursor: pointer;
       width: 100%;
       transition: background-color 0.3s ease;
     }
-
     #sendWhatsapp:hover {
       background-color: #20b958;
     }
-
     #sendWhatsapp svg {
       width: 22px;
       height: 22px;
       fill: white;
     }
-
-    @media (max-width: 600px) {
-      body {
-        padding: 10px;
-      }
-
-      .container {
-        padding: 20px;
-      }
-    }
   </style>
 </head>
 <body>
   <div class="container">
-	בס"ד
-    <h2>מחשבון נופש - משפחת בן-אברהם</h2>
-    <div id="countdown"></div>
+    <h2>מחשבון תשלומים - משפחת בן-אברהם</h2>
 
     <label>משתתפים:</label>
     <div class="checkboxes" id="families">
@@ -180,7 +140,7 @@
 
     <div id="result"></div>
 
-    <p class="footer-message">מקווים לראות את כולם בחיוך! 🌞</p>
+    <p class="footer-message">!מקווים לראות את כולם בחיוך 🌞</p>
 
     <button id="sendWhatsapp">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
@@ -188,13 +148,6 @@
       </svg>
       שלח לוואטסאפ
     </button>
-
-
-
-
-
-<div id="dishResult" style="text-align:center; font-size:1.2em; margin-top:15px;"></div>
-
   </div>
 
   <script>
@@ -216,7 +169,9 @@
 
     function updateParticipantDisplay() {
       const count = getParticipantCount();
-      participantsCount.innerText = count === 6 ? 'סה"כ משתתפים: כולם' : `סה"כ משתתפים: ${count}`;
+      participantsCount.innerText = count === 6
+        ? 'סה"כ משתתפים: כולם'
+        : `סה"כ משתתפים: ${count}`;
     }
 
     function calculate() {
@@ -227,17 +182,19 @@
 
       const totalVilla = price * nights;
       const shopping = includeShoppingCheckbox.checked ? parseFloat(shoppingAmountInput.value) || 0 : 0;
-      const funding = (totalVilla * (fundingPercent / 100)) + shopping;
-      const remaining = totalVilla - funding;
-      const perFamily = Math.max(remaining / participants, 0);
+
+      const fundingFromVilla = totalVilla * (fundingPercent / 100);
+      const totalFunding = fundingFromVilla + shopping;
+      const remainingToSplit = totalVilla - fundingFromVilla;
+      const perFamily = Math.max(remainingToSplit / participants, 0);
 
       fundingLabel.innerText = fundingPercent + "%";
 
       resultDiv.innerHTML = `
-        <strong>סה\"כ עלות לינה:</strong> ${totalVilla.toLocaleString()} ש\"ח<br/>
-        <strong>סה\"כ קניות:</strong> ${includeShoppingCheckbox.checked ? shopping.toLocaleString() : '0'} ש\"ח<br/>
-        <strong>סכום מימון כולל:</strong> ${funding.toLocaleString()} ש\"ח<br/>
-        <strong>סה\"כ השתתפות עצמית (למשפחה):</strong> ${perFamily.toFixed(1).toLocaleString()} ש\"ח
+        <strong>סה"כ עלות לינה:</strong> ${totalVilla.toLocaleString()} ש"ח<br/>
+        <strong>סה"כ קניות:</strong> ${includeShoppingCheckbox.checked ? shopping.toLocaleString() : '0'} ש"ח<br/>
+        <strong>סכום מימון כולל:</strong> ${totalFunding.toLocaleString()} ש"ח<br/>
+        <strong>סה"כ השתתפות עצמית (למשפחה):</strong> ${perFamily.toFixed(1).toLocaleString()} ש"ח
       `;
     }
 
@@ -248,21 +205,23 @@
       const participants = getParticipantCount() || 1;
       const totalVilla = price * nights;
       const shopping = includeShoppingCheckbox.checked ? parseFloat(shoppingAmountInput.value) || 0 : 0;
-      const funding = (totalVilla * (fundingPercent / 100)) + shopping;
-      const perFamily = Math.max((totalVilla - funding) / participants, 0);
+
+      const fundingFromVilla = totalVilla * (fundingPercent / 100);
+      const totalFunding = fundingFromVilla + shopping;
+      const perFamily = Math.max((totalVilla - fundingFromVilla) / participants, 0);
 
       const message =
         `🧰 חישוב נופש - משפחת בן-אברהם:
 ` +
-        `🏨 סה\"כ עלות לינה: ${totalVilla.toLocaleString()} ש\"ח
+        `🏨 סה"כ עלות לינה: ${totalVilla.toLocaleString()} ש"ח
 ` +
-        `🥒 סה\"כ קניות: ${includeShoppingCheckbox.checked ? shopping.toLocaleString() : '0'} ש\"ח
+        `🥒 סה"כ קניות: ${includeShoppingCheckbox.checked ? shopping.toLocaleString() : '0'} ש"ח
 ` +
-        `💰 סכום מימון כולל: ${funding.toLocaleString()} ש\"ח
+        `💰 סכום מימון כולל: ${totalFunding.toLocaleString()} ש"ח
 ` +
-        `👨‍👩‍👧‍👦 סה\"כ משתתפים: ${participants === 6 ? "כולם" : participants}
+        `👨‍👩‍👧‍👦 סה"כ משתתפים: ${participants === 6 ? "כולם" : participants}
 ` +
-        `🎯 סה\"כ השתתפות עצמית (למשפחה): ${perFamily.toFixed(1).toLocaleString()} ש\"ח`;
+        `🎯 סה"כ השתתפות עצמית (למשפחה): ${perFamily.toFixed(1).toLocaleString()} ש"ח`;
 
       const url = "https://api.whatsapp.com/send?text=" + encodeURIComponent(message);
       window.open(url, "_blank");
@@ -288,27 +247,5 @@
     calculate();
   </script>
 
-<script>
-  function updateCountdown() {
-    const targetDate = new Date("2025-08-10T00:00:00");
-    const now = new Date();
-    const diffTime = targetDate - now;
-    const diffDays = Math.max(Math.ceil(diffTime / (1000 * 60 * 60 * 24)), 0);
-
-    let text = "";
-    if (diffDays === 0) {
-      text = "הנופש מתחיל היום! 🎉";
-    } else if (diffDays === 1) {
-      text = "עוד יום אחד לנופש 🌞";
-    } else {
-      text = `עוד ${diffDays} ימים לנופש 🌞`;
-    }
-    document.getElementById("countdown").textContent = text;
-  }
-
-  updateCountdown();
-  setInterval(updateCountdown, 1000 * 60 * 60); // עדכון כל שעה
-</script>
- 
 </body>
 </html>
