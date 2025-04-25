@@ -46,6 +46,13 @@
     .main-button:hover {
       background-color: #004e59;
     }
+ #countdown {
+      text-align: center;
+      font-size: 1.2em;
+      margin-bottom: 20px;
+      color: #ff5722;
+      animation: pulse 2s infinite;
+    }
 
     @media (max-width: 600px) {
       .main-button {
@@ -62,9 +69,30 @@
 </head>
 <body>
   <h1>ברוכים הבאים - משפחת בן-אברהם 🌞</h1>
-
+<div id="countdown"></div>
   <button class="main-button" onclick="window.location.href='checklist.html'">📋 רשימת ציוד</button>
   <button class="main-button" onclick="window.location.href='lottery.html'">🎲 ההגרלה היומית</button>
   <button class="main-button" onclick="window.location.href='payments.html'">💰 תשלומים</button>
+  <script>
+  function updateCountdown() {
+    const targetDate = new Date("2025-08-10T00:00:00");
+    const now = new Date();
+    const diffTime = targetDate - now;
+    const diffDays = Math.max(Math.ceil(diffTime / (1000 * 60 * 60 * 24)), 0);
+
+    let text = "";
+    if (diffDays === 0) {
+      text = "הנופש מתחיל היום! 🎉";
+    } else if (diffDays === 1) {
+      text = "עוד יום אחד לנופש 🌞";
+    } else {
+      text = `עוד ${diffDays} ימים לנופש 🌞`;
+    }
+    document.getElementById("countdown").textContent = text;
+  }
+
+  updateCountdown();
+  setInterval(updateCountdown, 1000 * 60 * 60); // עדכון כל שעה
+</script>
 </body>
 </html>
