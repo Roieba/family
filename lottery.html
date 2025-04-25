@@ -1,31 +1,30 @@
+
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <title>הגרלת כלים - משפחת בן-אברהם</title>
+  <title>ההגרלה של משפחת בן-אברהם</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
-body {
-  font-family: "Segoe UI", sans-serif;
-  background: linear-gradient(-45deg, #fceabb, #ffb347, #fcd1d1, #f6f7d7);
-  background-size: 400% 400%;
-  animation: gradientBG 10s ease infinite;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  min-height: 100vh;
-  padding: 40px 20px;
-  margin: 0;
-}
+    body {
+      font-family: "Segoe UI", sans-serif;
+      background: linear-gradient(-45deg, #fceabb, #ffb347, #fcd1d1, #f6f7d7);
+      background-size: 400% 400%;
+      animation: gradientBG 10s ease infinite;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+      padding: 40px 20px;
+      margin: 0;
+    }
 
-@keyframes gradientBG {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-
-
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
 
     h1 {
       color: #6d4c41;
@@ -63,14 +62,21 @@ body {
       from { transform: scale(1); }
       to   { transform: scale(1.1); }
     }
+
+    #emoji {
+      text-align: center;
+      font-size: 3em;
+      margin-top: 30px;
+    }
   </style>
 </head>
 <body>
-  <h1>🎲 ההגרלה היומית של משפחת בן-אברהם</h1>
+  <h1>ההגרלה הגדולה של משפחת בן-אברהם 🎲</h1>
 
   <button onclick="chooseRandom()">הגרל!</button>
 
   <div id="result"></div>
+  <div id="emoji"></div>
 
   <script>
     const families = [
@@ -85,12 +91,16 @@ body {
     function chooseRandom() {
       const button = document.querySelector("button");
       const result = document.getElementById("result");
+      const emoji = document.getElementById("emoji");
+
       result.textContent = "🎲 מגרילים...";
+      emoji.innerHTML = "";
       button.classList.add("bouncing");
 
       setTimeout(() => {
         const chosen = families[Math.floor(Math.random() * families.length)];
         result.innerHTML = `🧼 <strong>${chosen}</strong> נבחרו להיות התורנים הראשיים! 🍽️`;
+        emoji.innerHTML = "😊";
         button.classList.remove("bouncing");
       }, 1200);
     }
