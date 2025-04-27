@@ -1,73 +1,157 @@
+
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <title>צ'קליסט לנופש</title>
+  <title>צ'קליסט משפחתי - בן אברהם</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background: #f5f5f5;
+      font-family: "Segoe UI", sans-serif;
+      background: linear-gradient(-45deg, #a1c4fd, #c2e9fb);
+      background-size: 400% 400%;
+      animation: gradientBG 10s ease infinite;
+      min-height: 100vh;
+      margin: 0;
       padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
-    h2 {
-      text-align: center;
-      color: #00796b;
+    @keyframes gradientBG {
+      0% {background-position: 0% 50%;}
+      50% {background-position: 100% 50%;}
+      100% {background-position: 0% 50%;}
+    }
+    h1 {
       margin-bottom: 20px;
+      color: #003366;
+      text-align: center;
+    }
+    #addForm {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      justify-content: center;
+    }
+    #addForm input {
+      padding: 10px;
+      font-size: 1em;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      flex: 1;
+    }
+    #addForm button {
+      padding: 10px 20px;
+      font-size: 1em;
+      border-radius: 8px;
+      border: none;
+      background-color: #4CAF50;
+      color: white;
+      cursor: pointer;
     }
     ul {
       list-style: none;
       padding: 0;
-      max-width: 500px;
-      margin: 0 auto;
+      width: 100%;
+      max-width: 400px;
     }
     li {
-      background: white;
-      border-radius: 8px;
+      background: #ffffffcc;
       margin-bottom: 10px;
       padding: 10px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    }
-    label {
+      border-radius: 8px;
       display: flex;
       align-items: center;
-      gap: 10px;
-      font-size: 1.1em;
+      justify-content: space-between;
+    }
+    li input[type="checkbox"] {
+      margin-left: 10px;
+    }
+    .delete-btn {
+      background: none;
+      border: none;
+      color: #ff4444;
+      font-size: 1.2em;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
-  <h2>צ'קליסט משפחתי לנופש 🧳</h2>
-  <ul id="checklist">
-    <li><label><input type="checkbox" data-key="clothes"> בגדים</label></li>
-    <li><label><input type="checkbox" data-key="towels"> מגבות</label></li>
-    <li><label><input type="checkbox" data-key="spices"> תבלינים</label></li>
-    <li><label><input type="checkbox" data-key="toys"> משחקים לילדים</label></li>
-    <li><label><input type="checkbox" data-key="snacks"> חטיפים לדרך</label></li>
-    <li><label><input type="checkbox" data-key="chargers"> מטענים</label></li>
-    <li><label><input type="checkbox" data-key="hats"> כובעים</label></li>
-    <li><label><input type="checkbox" data-key="sunblock"> קרם הגנה</label></li>
-    <li><label><input type="checkbox" data-key="swimwear"> בגדי ים</label></li>
-    <li><label><input type="checkbox" data-key="shoes"> נעליים / סנדלים</label></li>
-    <li><label><input type="checkbox" data-key="medicine"> תרופות אישיות</label></li>
-    <li><label><input type="checkbox" data-key="firstaid"> ערכת עזרה ראשונה</label></li>
-    <li><label><input type="checkbox" data-key="flashlight"> פנס</label></li>
-    <li><label><input type="checkbox" data-key="games"> משחקי קופסה</label></li>
-    <li><label><input type="checkbox" data-key="books"> ספרים / חוברות צביעה</label></li>
-    <li><label><input type="checkbox" data-key="bedding"> מצעים / כריות</label></li>
-    <li><label><input type="checkbox" data-key="food"> אוכל מוכן / יבש</label></li>
-    <li><label><input type="checkbox" data-key="cutlery"> כלים חד פעמיים</label></li>
-    <li><label><input type="checkbox" data-key="soap"> סבון / שמפו</label></li>
-    <li><label><input type="checkbox" data-key="toiletpaper"> נייר טואלט</label></li>
-  </ul>
+  <h1>צ'קליסט משפחתי 📝</h1>
 
-  <script>
-    document.querySelectorAll('#checklist input[type=checkbox]').forEach(cb => {
-      const key = 'checklist_' + cb.dataset.key;
-      cb.checked = localStorage.getItem(key) === 'true';
-      cb.addEventListener('change', () => {
-        localStorage.setItem(key, cb.checked);
+  <form id="addForm">
+    <input type="text" id="itemInput" placeholder="הוסף פריט חדש..." required>
+    <button type="submit">➕</button>
+  </form>
+
+  <ul id="checklist"></ul>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import { getDatabase, ref, push, set, onValue, update, remove } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyA2ik_QDKOvcE1vk-XumA9502ffRmiBm68",
+      authDomain: "vacationfamilychecklist.firebaseapp.com",
+      databaseURL: "https://vacationfamilychecklist-default-rtdb.firebaseio.com",
+      projectId: "vacationfamilychecklist",
+      storageBucket: "vacationfamilychecklist.appspot.com",
+      messagingSenderId: "652023210604",
+      appId: "1:652023210604:web:767527fac16f81686cee49"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const database = getDatabase(app);
+    const checklistRef = ref(database, "checklist");
+
+    const checklist = document.getElementById("checklist");
+    const addForm = document.getElementById("addForm");
+    const itemInput = document.getElementById("itemInput");
+
+    // טעינת הצ'קליסט מה-Database
+    onValue(checklistRef, (snapshot) => {
+      checklist.innerHTML = "";
+      snapshot.forEach((childSnapshot) => {
+        const itemKey = childSnapshot.key;
+        const itemData = childSnapshot.val();
+        const li = document.createElement("li");
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.checked = itemData.checked || false;
+        checkbox.addEventListener("change", () => {
+          update(ref(database, "checklist/" + itemKey), { checked: checkbox.checked });
+        });
+
+        const span = document.createElement("span");
+        span.textContent = itemData.text;
+
+        const deleteBtn = document.createElement("button");
+        deleteBtn.textContent = "❌";
+        deleteBtn.classList.add("delete-btn");
+        deleteBtn.addEventListener("click", () => {
+          remove(ref(database, "checklist/" + itemKey));
+        });
+
+        li.appendChild(checkbox);
+        li.appendChild(span);
+        li.appendChild(deleteBtn);
+        checklist.appendChild(li);
       });
+    });
+
+    // הוספת פריט חדש
+    addForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const text = itemInput.value.trim();
+      if (text) {
+        const newItemRef = push(checklistRef);
+        set(newItemRef, {
+          text: text,
+          checked: false
+        });
+        itemInput.value = "";
+      }
     });
   </script>
 </body>
