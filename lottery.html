@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
@@ -78,6 +77,9 @@
   <div id="result"></div>
   <div id="emoji"></div>
 
+  <!-- תוספת: אפקט תופים -->
+  <audio id="drumroll" src="https://cdn.pixabay.com/download/audio/2021/09/14/audio_c6f2c7d9e2.mp3?filename=drum-roll-5746.mp3"></audio>
+
   <script>
     const families = [
       "רועי וקרנית",
@@ -92,10 +94,14 @@
       const button = document.querySelector("button");
       const result = document.getElementById("result");
       const emoji = document.getElementById("emoji");
+      const drumroll = document.getElementById("drumroll"); // אלמנט קול
 
       result.textContent = "🎲 מגרילים...";
       emoji.innerHTML = "";
       button.classList.add("bouncing");
+
+      drumroll.currentTime = 0; // מתחילים מהתחלה
+      drumroll.play();          // מפעילים תופים
 
       setTimeout(() => {
         const chosen = families[Math.floor(Math.random() * families.length)];
