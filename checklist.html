@@ -52,9 +52,14 @@
     }
     #message {
       font-size: 1em;
-      color: green;
-      margin-bottom: 15px;
-      height: 1.2em;
+      margin-bottom: 10px;
+      min-height: 1.2em;
+      color: #00695c;
+    }
+    #counter {
+      font-size: 1em;
+      margin-top: 20px;
+      color: #003366;
     }
     ul {
       list-style: none;
@@ -100,6 +105,8 @@
 
   <ul id="checklist"></ul>
 
+  <div id="counter"></div>
+
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
     import { getDatabase, ref, push, set, onValue, update, remove } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-database.js";
@@ -122,12 +129,19 @@
     const addForm = document.getElementById("addForm");
     const itemInput = document.getElementById("itemInput");
     const message = document.getElementById("message");
+    const counter = document.getElementById("counter");
+
+    let existingItems = [];
 
     onValue(checklistRef, (snapshot) => {
       checklist.innerHTML = "";
+      existingItems = [];
+      let count = 0;
       snapshot.forEach((childSnapshot) => {
         const itemKey = childSnapshot.key;
         const itemData = childSnapshot.val();
+        existingItems.push(itemData.text.toLowerCase());
+
         const li = document.createElement("li");
         const checkbox = document.createElement("input");
         checkbox.type = "checkbox";
@@ -147,7 +161,7 @@
             li.classList.add("fade-out");
             setTimeout(() => {
               remove(ref(database, "checklist/" + itemKey));
-            }, 500); // זמן המתנה לאנימציה
+            }, 500);
           }
         });
 
@@ -155,25 +169,32 @@
         li.appendChild(span);
         li.appendChild(deleteBtn);
         checklist.appendChild(li);
+        count++;
       });
+      counter.textContent = `סה"כ פריטים בצ'קליסט: ${count}`;
     });
 
     addForm.addEventListener("submit", (e) => {
       e.preventDefault();
       const text = itemInput.value.trim();
       if (text) {
-        const newItemRef = push(checklistRef);
-        set(newItemRef, {
-          text: text,
-          checked: false
-        }).then(() => {
-          showMessage("✅ הפריט נוסף בהצלחה!");
-        });
-        itemInput.value = "";
+        if (existingItems.includes(text.toLowerCase())) {
+          showMessage("❗ הפריט כבר קיים בצ'קליסט!", true);
+        } else {
+          const newItemRef = push(checklistRef);
+          set(newItemRef, {
+            text: text,
+            checked: false
+          }).then(() => {
+            showMessage("✅ הפריט נוסף בהצלחה!");
+          });
+          itemInput.value = "";
+        }
       }
     });
 
-    function showMessage(msg) {
+    function showMessage(msg, isError = false) {
+      message.style.color = isError ? "#d32f2f" : "#00695c";
       message.textContent = msg;
       setTimeout(() => {
         message.textContent = "";
