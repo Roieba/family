@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>צ'קליסט לנופש</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      padding: 20px;
+    }
+    h2 {
+      text-align: center;
+      color: #00796b;
+      margin-bottom: 20px;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+    li {
+      background: white;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      padding: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.1em;
+    }
+  </style>
+</head>
+<body>
+  <h2>צ'קליסט משפחתי לנופש 🧳</h2>
+  <ul id="checklist">
+    <li><label><input type="checkbox" data-key="clothes"> בגדים</label></li>
+    <li><label><input type="checkbox" data-key="towels"> מגבות</label></li>
+    <li><label><input type="checkbox" data-key="spices"> תבלינים</label></li>
+    <li><label><input type="checkbox" data-key="toys"> משחקים לילדים</label></li>
+    <li><label><input type="checkbox" data-key="snacks"> חטיפים לדרך</label></li>
+    <li><label><input type="checkbox" data-key="chargers"> מטענים</label></li>
+    <li><label><input type="checkbox" data-key="hats"> כובעים</label></li>
+    <li><label><input type="checkbox" data-key="sunblock"> קרם הגנה</label></li>
+    <li><label><input type="checkbox" data-key="swimwear"> בגדי ים</label></li>
+    <li><label><input type="checkbox" data-key="shoes"> נעליים / סנדלים</label></li>
+    <li><label><input type="checkbox" data-key="medicine"> תרופות אישיות</label></li>
+    <li><label><input type="checkbox" data-key="firstaid"> ערכת עזרה ראשונה</label></li>
+    <li><label><input type="checkbox" data-key="flashlight"> פנס</label></li>
+    <li><label><input type="checkbox" data-key="games"> משחקי קופסה</label></li>
+    <li><label><input type="checkbox" data-key="books"> ספרים / חוברות צביעה</label></li>
+    <li><label><input type="checkbox" data-key="bedding"> מצעים / כריות</label></li>
+    <li><label><input type="checkbox" data-key="food"> אוכל מוכן / יבש</label></li>
+    <li><label><input type="checkbox" data-key="cutlery"> כלים חד פעמיים</label></li>
+    <li><label><input type="checkbox" data-key="soap"> סבון / שמפו</label></li>
+    <li><label><input type="checkbox" data-key="toiletpaper"> נייר טואלט</label></li>
+  </ul>
+
+  <script>
+    document.querySelectorAll('#checklist input[type=checkbox]').forEach(cb => {
+      const key = 'checklist_' + cb.dataset.key;
+      cb.checked = localStorage.getItem(key) === 'true';
+      cb.addEventListener('change', () => {
+        localStorage.setItem(key, cb.checked);
+      });
+    });
+  </script>
+</body>
+</html>
