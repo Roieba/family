@@ -94,7 +94,7 @@
     const firebaseConfig = {
       apiKey: "AIzaSyA2ik_QDKOvcE1vk-XumA9502ffRmiBm68",
       authDomain: "vacationfamilychecklist.firebaseapp.com",
-      databaseURL: "https://vacationfamilychecklist-default-rtdb.firebaseio.com",
+      databaseURL: "https://vacationfamilychecklist-default-rtdb.europe-west1.firebasedatabase.app",
       projectId: "vacationfamilychecklist",
       storageBucket: "vacationfamilychecklist.appspot.com",
       messagingSenderId: "652023210604",
@@ -109,7 +109,6 @@
     const addForm = document.getElementById("addForm");
     const itemInput = document.getElementById("itemInput");
 
-    // טעינת הצ'קליסט מה-Database
     onValue(checklistRef, (snapshot) => {
       checklist.innerHTML = "";
       snapshot.forEach((childSnapshot) => {
@@ -140,7 +139,6 @@
       });
     });
 
-    // הוספת פריט חדש
     addForm.addEventListener("submit", (e) => {
       e.preventDefault();
       const text = itemInput.value.trim();
