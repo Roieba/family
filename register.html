@@ -63,7 +63,7 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 const messaging = firebase.messaging();
 
-navigator.serviceWorker.register("/firebase-messaging-sw.js").then((registration) => {
+navigator.serviceWorker.register("/family/firebase-messaging-sw.js").then((registration) => {
   messaging.useServiceWorker(registration);
 
   messaging.getToken({ vapidKey: "BMXIK5u4EN07OwyQvDzNeq9vcWEuM7Bowm8dQy0GbTstxsNwQHL1bunsJp1WprULju5rLg17fJfedoptwQ2qWI" })
