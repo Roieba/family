@@ -59,13 +59,17 @@ const db = firebase.firestore();
 const messaging = firebase.messaging();
 
 navigator.serviceWorker.register("/family/firebase-messaging-sw.js").then((registration) => {
-  messaging.useServiceWorker(registration);
-  messaging.getToken({ vapidKey: "BMXIK5u4EN07OwyQvDzNeq9vcWEuM7Bowm8dQy0GbTstxsNwQHL1bunsJp1WprULju5rLg17fJfedoptwQ2qWI" }).then((token) => {
+  messaging.getToken({
+    vapidKey: "BMXIK5u4EN07OwyQvDzNeq9vcWEuM7Bowm8dQy0GbTstxsNwQHL1bunsJp1WprULju5rLg17fJfedoptwQ2qWI",
+    serviceWorkerRegistration: registration
+  }).then((token) => {
     window.currentToken = token;
     console.log("token:", token);
+  }).catch((err) => {
+    console.error("שגיאה בקבלת טוקן", err);
   });
 }).catch((err) => {
-  console.error("Service Worker registration failed", err);
+  console.error("שגיאה ברישום service worker", err);
 });
 
 function register() {
