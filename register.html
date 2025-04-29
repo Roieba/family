@@ -42,9 +42,12 @@
   <script src="https://www.gstatic.com/firebasejs/11.6.1/firebase-messaging.js"></script>
 </head>
 <body>
+
 <h1>הרשמה לקבלת התראות 📣</h1>
 <p>לחץ על הכפתור להירשם למערכת ההתראות של המשפחה:</p>
+
 <button onclick="register()">הרשם עכשיו</button>
+
 <script>
 const firebaseConfig = {
   apiKey: "AIzaSyA2ik_QDKOvcE1vk-XumA9502ffRmiBm68",
@@ -54,24 +57,54 @@ const firebaseConfig = {
   messagingSenderId: "652023210604",
   appId: "1:652023210604:web:767527fac16f81686cee49"
 };
+
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 const messaging = firebase.messaging();
-messaging.getToken({ vapidKey: "BMXIK5u4EN07OwyQvDzNeq9vcWEuM7Bowm8dQy0GbTstxsNwQHL1bunsJp1WprULju5rLg17fJfedoptwQ2qWI" }).then((token) => {
-  window.currentToken = token;
+
+navigator.serviceWorker.register("/firebase-messaging-sw.js").then((registration) => {
+  messaging.useServiceWorker(registration);
+
+  messaging.getToken({ vapidKey: "BMXIK5u4EN07OwyQvDzNeq9vcWEuM7Bowm8dQy0GbTstxsNwQHL1bunsJp1WprULju5rLg17fJfedoptwQ2qWI" })
+    .then((token) => {
+      window.currentToken = token;
+      console.log("Token:", token);
+    })
+    .catch((err) => {
+      console.error("שגיאה בקבלת טוקן", err);
+    });
+}).catch((err) => {
+  console.error("רישום service worker נכשל", err);
 });
-async function register() {
-  if (!window.currentToken) return alert("לא התקבל טוקן עדיין");
-  const doc = await db.collection("tokens").doc(window.currentToken).get();
-  if (doc.exists) return alert("כבר נרשמת ✅");
-  db.collection("tokens").doc(window.currentToken).set({
-    token: window.currentToken,
-    topic: "all",
-    timestamp: firebase.firestore.FieldValue.serverTimestamp()
-  }).then(() => {
-    alert("נרשמת בהצלחה ✅");
+
+function register() {
+  Notification.requestPermission().then((permission) => {
+    if (permission !== "granted") {
+      alert("יש לאשר הרשאת התראות על מנת להירשם");
+      return;
+    }
+
+    if (!window.currentToken) {
+      alert("לא התקבל טוקן עדיין");
+      return;
+    }
+
+    db.collection("tokens").doc(window.currentToken).get().then((doc) => {
+      if (doc.exists) {
+        alert("כבר נרשמת ✅");
+      } else {
+        db.collection("tokens").doc(window.currentToken).set({
+          token: window.currentToken,
+          topic: "all",
+          timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        }).then(() => {
+          alert("נרשמת בהצלחה ✅");
+        });
+      }
+    });
   });
 }
 </script>
+
 </body>
 </html>
