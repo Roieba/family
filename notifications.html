@@ -1,0 +1,114 @@
+
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>ניהול התראות - משפחת בן-אברהם</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      font-family: "Segoe UI", sans-serif;
+      background: linear-gradient(135deg, #fceabb, #f8b500);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+      margin: 0;
+      padding: 30px 20px;
+      text-align: center;
+    }
+    h1 {
+      color: #6d4c41;
+      margin-bottom: 20px;
+    }
+    label, input, select, button {
+      margin: 10px 0;
+      font-size: 1.1em;
+    }
+    input, select {
+      padding: 10px;
+      width: 90%;
+      max-width: 300px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+    button {
+      padding: 12px 24px;
+      background-color: #0288d1;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      margin-top: 15px;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #0277bd;
+    }
+  </style>
+</head>
+<body>
+
+<h1>שלח התראה מותאמת 🚀</h1>
+
+<label for="message">תוכן ההתראה:</label>
+<input type="text" id="message" placeholder="כתוב הודעה (למשל: תכף ארוחה!)" maxlength="100" />
+
+<label for="delay">שלח אחרי:</label>
+<select id="delay">
+  <option value="0">מיידי</option>
+  <option value="5">5 שניות</option>
+  <option value="10">10 שניות</option>
+  <option value="30">30 שניות</option>
+  <option value="60">דקה</option>
+</select>
+
+<br/>
+<button onclick="sendNotification()">שלח התראה 📣</button>
+
+<script>
+// רישום Service Worker
+if ('serviceWorker' in navigator && 'Notification' in window) {
+  navigator.serviceWorker.register('service-worker.js')
+    .then(function(registration) {
+      console.log('✅ Service Worker נרשם');
+    }).catch(function(error) {
+      console.error('❌ רישום נכשל:', error);
+    });
+} else {
+  alert('הדפדפן שלך לא תומך בהתראות דחיפה.');
+}
+
+// בקשת הרשאה אם צריך
+Notification.requestPermission().then(function(permission) {
+  if (permission !== "granted") {
+    alert('אנא אפשר קבלת התראות מהאתר כדי להשתמש בפיצ׳ר זה.');
+  }
+});
+
+// שליחת התראה
+function sendNotification() {
+  const message = document.getElementById('message').value.trim();
+  const delay = parseInt(document.getElementById('delay').value) * 1000;
+
+  if (!message) {
+    alert('אנא כתוב הודעה לפני השליחה.');
+    return;
+  }
+
+  setTimeout(() => {
+    navigator.serviceWorker.ready.then(function(registration) {
+      registration.showNotification('📣 התראה מהמשפחה:', {
+        body: message,
+        icon: 'https://cdn-icons-png.flaticon.com/512/869/869636.png',
+        badge: 'https://cdn-icons-png.flaticon.com/512/869/869636.png',
+        vibrate: [200, 100, 200],
+      });
+    });
+  }, delay);
+}
+</script>
+
+</body>
+</html>
