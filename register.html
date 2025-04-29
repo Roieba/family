@@ -60,7 +60,7 @@ const messaging = firebase.messaging();
 
 navigator.serviceWorker.register("/family/firebase-messaging-sw.js").then((registration) => {
   messaging.getToken({
-    vapidKey: "BMXIK5u4EN07OwyQvDzNeq9vcWEuM7Bowm8dQy0GbTstxsNwQHL1bunsJp1WprULju5rLg17fJfedoptwQ2qWI",
+    vapidKey: "BMXlK5u4ENO70wyQvDzNeq9vcWEuM7Bowm8dQYgObTstxsNwQHL1bunsJp1WprULju5rLg17fPJfedoptwQ2qWI",
     serviceWorkerRegistration: registration
   }).then((token) => {
     window.currentToken = token;
