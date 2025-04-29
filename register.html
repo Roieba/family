@@ -1,0 +1,77 @@
+
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>הרשמה לקבלת התראות</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      font-family: "Segoe UI", sans-serif;
+      background: linear-gradient(135deg, #fceabb, #f8b500);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+      margin: 0;
+      padding: 30px 20px;
+      text-align: center;
+    }
+    h1 {
+      color: #6d4c41;
+      margin-bottom: 20px;
+    }
+    button {
+      margin-top: 20px;
+      padding: 12px 24px;
+      font-size: 1.2em;
+      background-color: #0288d1;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #0277bd;
+    }
+  </style>
+  <script src="https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/11.6.1/firebase-messaging.js"></script>
+</head>
+<body>
+<h1>הרשמה לקבלת התראות 📣</h1>
+<p>לחץ על הכפתור להירשם למערכת ההתראות של המשפחה:</p>
+<button onclick="register()">הרשם עכשיו</button>
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyA2ik_QDKOvcE1vk-XumA9502ffRmiBm68",
+  authDomain: "vacationfamilychecklist.firebaseapp.com",
+  projectId: "vacationfamilychecklist",
+  storageBucket: "vacationfamilychecklist.appspot.com",
+  messagingSenderId: "652023210604",
+  appId: "1:652023210604:web:767527fac16f81686cee49"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+const messaging = firebase.messaging();
+messaging.getToken({ vapidKey: "BMXIK5u4EN07OwyQvDzNeq9vcWEuM7Bowm8dQy0GbTstxsNwQHL1bunsJp1WprULju5rLg17fJfedoptwQ2qWI" }).then((token) => {
+  window.currentToken = token;
+});
+async function register() {
+  if (!window.currentToken) return alert("לא התקבל טוקן עדיין");
+  const doc = await db.collection("tokens").doc(window.currentToken).get();
+  if (doc.exists) return alert("כבר נרשמת ✅");
+  db.collection("tokens").doc(window.currentToken).set({
+    token: window.currentToken,
+    topic: "all",
+    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+  }).then(() => {
+    alert("נרשמת בהצלחה ✅");
+  });
+}
+</script>
+</body>
+</html>

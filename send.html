@@ -1,0 +1,89 @@
+
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>שליחת התראה (למנהל בלבד)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      font-family: "Segoe UI", sans-serif;
+      background: linear-gradient(135deg, #fceabb, #f8b500);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+      margin: 0;
+      padding: 30px 20px;
+      text-align: center;
+    }
+    input, button {
+      margin: 10px 0;
+      padding: 12px;
+      width: 80%;
+      max-width: 300px;
+      font-size: 1.1em;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+    button {
+      background-color: #0288d1;
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #0277bd;
+    }
+    #sendForm {
+      display: none;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+<h2>שלח הודעה לכולם 📢</h2>
+<div id="authForm">
+  <input type="password" id="password" placeholder="סיסמה" />
+  <button onclick="checkPassword()">כניסה</button>
+</div>
+<div id="sendForm">
+  <input type="text" id="message" placeholder="כתוב הודעה לכולם" />
+  <button onclick="sendNotification()">שלח התראה</button>
+</div>
+<script>
+const ADMIN_PASSWORD = "123456";
+function checkPassword() {
+  const entered = document.getElementById("password").value.trim();
+  if (entered === ADMIN_PASSWORD) {
+    document.getElementById("authForm").style.display = "none";
+    document.getElementById("sendForm").style.display = "block";
+  } else {
+    alert("סיסמה שגויה ❌");
+  }
+}
+async function sendNotification() {
+  const message = document.getElementById("message").value.trim();
+  if (!message) return alert("הזן הודעה");
+  const res = await fetch("https://fcm.googleapis.com/fcm/send", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": "key=AIzaSyA2ik_QDKOvcE1vk-XumA9502ffRmiBm68"
+    },
+    body: JSON.stringify({
+      to: "/topics/all",
+      notification: {
+        title: "📣 הודעה מהמשפחה",
+        body: message,
+        icon: "https://cdn-icons-png.flaticon.com/512/869/869636.png"
+      }
+    })
+  });
+  if (res.ok) alert("ההודעה נשלחה 🎉");
+  else alert("שליחה נכשלה");
+}
+</script>
+</body>
+</html>
