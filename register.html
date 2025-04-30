@@ -75,6 +75,11 @@
         if (token) {
           status.textContent = "נרשמת בהצלחה לקבלת התראות 🎉";
           console.log("Token:", token);
+          await fetch("https://winter-enchanting-feels.glitch.me/register-token", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ token })
+          });
         } else {
           status.textContent = "לא התקבל טוקן. ודא שהרשאות ההתראה מאושרות.";
         }
