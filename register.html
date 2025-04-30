@@ -4,10 +4,45 @@
   <meta charset="UTF-8">
   <title>הרשמה להתראות</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      font-family: "Segoe UI", sans-serif;
+      background: linear-gradient(to bottom right, #ffecd2, #fcb69f);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1 {
+      color: #444;
+    }
+
+    button {
+      padding: 12px 20px;
+      font-size: 1.2em;
+      background-color: #00796b;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #004d40;
+    }
+  </style>
+</head>
+<body>
+  <h1>הירשם להתראות</h1>
+  <button onclick="registerForNotifications()">הרשמה עכשיו</button>
+
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-    import { getMessaging, getToken } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-messaging.js";
-    import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-database.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import { getMessaging, getToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-messaging.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyA2ik_QDKOvcE1vk-XumA9502ffRmiBm68",
@@ -15,67 +50,39 @@
       projectId: "vacationfamilychecklist",
       storageBucket: "vacationfamilychecklist.appspot.com",
       messagingSenderId: "652023210604",
-      appId: "1:652023210604:web:767527fac16f81686cee49",
-      databaseURL: "https://vacationfamilychecklist-default-rtdb.europe-west1.firebasedatabase.app"
+      appId: "1:652023210604:web:767527fac16f81686cee49"
     };
 
     const app = initializeApp(firebaseConfig);
     const messaging = getMessaging(app);
-    const db = getDatabase(app);
 
     async function registerForNotifications() {
       try {
         const permission = await Notification.requestPermission();
         if (permission !== "granted") {
-          alert("לא אושרו התראות");
+          alert("לא ניתן אישור לקבלת התראות");
           return;
         }
 
+        const registration = await navigator.serviceWorker.register('./firebase-messaging-sw.js');
+        console.log("Service worker registered", registration);
+
         const token = await getToken(messaging, {
-          vapidKey: "BMXIK5u4EN07OwyQvDzNeq9vcWEuM7Bowm8dQy0GbTstxsNwQHL1bunsJp1WprULju5rLg17fJfedoptwQ2qWI"
+          vapidKey: "BMXlK5u4ENO70wyQvDzNeq9vcWEuM7Bowm8dQYgObTstxsNwQHL1bunsJp1WprULju5rLg17fPJfedoptwQ2qWI",
+          serviceWorkerRegistration: registration
         });
 
         if (token) {
-          await set(ref(db, "tokens/" + token), true);
-          alert("נרשמת בהצלחה!");
-          console.log("FCM Token:", token);
+          alert("נרשמת בהצלחה 🎉");
+          console.log("Token:", token);
         } else {
-          console.log("לא התקבל טוקן");
+          alert("לא התקבל טוקן");
         }
       } catch (err) {
         console.error("שגיאה בהרשמה:", err);
         alert("שגיאה בהרשמה: " + err.message);
       }
     }
-
-    document.addEventListener("DOMContentLoaded", () => {
-      const btn = document.getElementById("registerBtn");
-      if (btn) {
-        btn.addEventListener("click", registerForNotifications);
-      }
-    });
   </script>
-  <style>
-    body {
-      font-family: sans-serif;
-      text-align: center;
-      padding: 40px;
-      background: #e3f2fd;
-    }
-    button {
-      padding: 15px 25px;
-      background: #2196f3;
-      color: white;
-      border: none;
-      border-radius: 10px;
-      font-size: 1.2em;
-      cursor: pointer;
-    }
-  </style>
-</head>
-<body>
-  <h2>הרשמה להתראות פוש</h2>
-  <p>קבלו עדכונים מהמשפחה ישירות לטלפון שלכם!</p>
-  <button id="registerBtn">הירשם עכשיו</button>
 </body>
 </html>
