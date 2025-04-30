@@ -65,6 +65,9 @@ navigator.serviceWorker.register("/family/firebase-messaging-sw.js").then((regis
   }).then((token) => {
     window.currentToken = token;
     console.log("token:", token);
+    import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-database.js"; //רישום טוקן ב-Database 2 שורות
+set(ref(db, 'tokens/' + token), true);
+
   }).catch((err) => {
     console.error("שגיאה בקבלת טוקן", err);
   });
