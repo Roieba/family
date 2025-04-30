@@ -1,44 +1,52 @@
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <title>הרשמה להתראות</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>הרשמה לקבלת התראות</title>
   <style>
     body {
       font-family: "Segoe UI", sans-serif;
-      background: linear-gradient(to bottom right, #ffecd2, #fcb69f);
+      background: linear-gradient(to bottom right, #fff2cc, #ffd699);
       display: flex;
-      justify-content: center;
-      align-items: center;
       flex-direction: column;
-      min-height: 100vh;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
       margin: 0;
-      padding: 20px;
     }
 
     h1 {
       color: #444;
+      margin-bottom: 20px;
     }
 
     button {
       padding: 12px 20px;
-      font-size: 1.2em;
-      background-color: #00796b;
+      font-size: 1.1em;
+      background-color: #ff9800;
       color: white;
       border: none;
       border-radius: 8px;
       cursor: pointer;
+      transition: background-color 0.3s ease;
     }
 
     button:hover {
-      background-color: #004d40;
+      background-color: #e68900;
+    }
+
+    .message {
+      margin-top: 20px;
+      font-size: 1em;
+      color: #333;
     }
   </style>
 </head>
 <body>
-  <h1>הירשם להתראות</h1>
-  <button onclick="registerForNotifications()">הרשמה עכשיו</button>
+  <h1>ברוך הבא!</h1>
+  <button onclick="registerForNotifications()">הרשם עכשיו</button>
+  <div class="message" id="status"></div>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
@@ -56,33 +64,25 @@
     const app = initializeApp(firebaseConfig);
     const messaging = getMessaging(app);
 
-    async function registerForNotifications() {
+    window.registerForNotifications = async () => {
+      const status = document.getElementById("status");
       try {
-        const permission = await Notification.requestPermission();
-        if (permission !== "granted") {
-          alert("לא ניתן אישור לקבלת התראות");
-          return;
-        }
-
-        const registration = await navigator.serviceWorker.register('./firebase-messaging-sw.js');
-        console.log("Service worker registered", registration);
-
         const token = await getToken(messaging, {
           vapidKey: "BMXlK5u4ENO70wyQvDzNeq9vcWEuM7Bowm8dQYgObTstxsNwQHL1bunsJp1WprULju5rLg17fPJfedoptwQ2qWI",
-          serviceWorkerRegistration: registration
+          serviceWorkerRegistration: await navigator.serviceWorker.register("/family/firebase-messaging-sw.js")
         });
 
         if (token) {
-          alert("נרשמת בהצלחה 🎉");
+          status.textContent = "נרשמת בהצלחה לקבלת התראות 🎉";
           console.log("Token:", token);
         } else {
-          alert("לא התקבל טוקן");
+          status.textContent = "לא התקבל טוקן. ודא שהרשאות ההתראה מאושרות.";
         }
       } catch (err) {
-        console.error("שגיאה בהרשמה:", err);
-        alert("שגיאה בהרשמה: " + err.message);
+        console.error("שגיאה ברישום:", err);
+        status.textContent = "שגיאה ברישום לקבלת התראות.";
       }
-    }
+    };
   </script>
 </body>
 </html>
