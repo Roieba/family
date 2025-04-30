@@ -1,105 +1,81 @@
-
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
   <meta charset="UTF-8">
   <title>הרשמה להתראות</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <script src="https://www.gstatic.com/firebasejs/11.6.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/11.6.1/firebase-messaging-compat.js"></script>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+    import { getMessaging, getToken } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-messaging.js";
+    import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyA2ik_QDKOvcE1vk-XumA9502ffRmiBm68",
+      authDomain: "vacationfamilychecklist.firebaseapp.com",
+      projectId: "vacationfamilychecklist",
+      storageBucket: "vacationfamilychecklist.appspot.com",
+      messagingSenderId: "652023210604",
+      appId: "1:652023210604:web:767527fac16f81686cee49",
+      databaseURL: "https://vacationfamilychecklist-default-rtdb.europe-west1.firebasedatabase.app"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const messaging = getMessaging(app);
+    const db = getDatabase(app);
+
+    async function registerForNotifications() {
+      try {
+        const permission = await Notification.requestPermission();
+        if (permission !== "granted") {
+          alert("לא אושרו התראות");
+          return;
+        }
+
+        const token = await getToken(messaging, {
+          vapidKey: "BMXIK5u4EN07OwyQvDzNeq9vcWEuM7Bowm8dQy0GbTstxsNwQHL1bunsJp1WprULju5rLg17fJfedoptwQ2qWI"
+        });
+
+        if (token) {
+          await set(ref(db, "tokens/" + token), true);
+          alert("נרשמת בהצלחה!");
+          console.log("FCM Token:", token);
+        } else {
+          console.log("לא התקבל טוקן");
+        }
+      } catch (err) {
+        console.error("שגיאה בהרשמה:", err);
+        alert("שגיאה בהרשמה: " + err.message);
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const btn = document.getElementById("registerBtn");
+      if (btn) {
+        btn.addEventListener("click", registerForNotifications);
+      }
+    });
+  </script>
   <style>
     body {
-      font-family: "Segoe UI", sans-serif;
-      background: linear-gradient(135deg, #fceabb, #f8b500);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-      min-height: 100vh;
-      margin: 0;
-      padding: 30px 20px;
+      font-family: sans-serif;
       text-align: center;
-    }
-    h1 {
-      color: #6d4c41;
-      margin-bottom: 20px;
+      padding: 40px;
+      background: #e3f2fd;
     }
     button {
-      margin-top: 20px;
-      padding: 12px 24px;
-      font-size: 1.2em;
-      background-color: #0288d1;
+      padding: 15px 25px;
+      background: #2196f3;
       color: white;
       border: none;
       border-radius: 10px;
+      font-size: 1.2em;
       cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-    button:hover {
-      background-color: #0277bd;
     }
   </style>
 </head>
 <body>
-<h1>הרשמה לקבלת התראות 📣</h1>
-<p>לחץ על הכפתור להירשם למערכת ההתראות של המשפחה:</p>
-<button onclick="register()">הרשם עכשיו</button>
-<script>
-const firebaseConfig = {
-  apiKey: "AIzaSyA2ik_QDKOvcE1vk-XumA9502ffRmiBm68",
-  authDomain: "vacationfamilychecklist.firebaseapp.com",
-  projectId: "vacationfamilychecklist",
-  storageBucket: "vacationfamilychecklist.appspot.com",
-  messagingSenderId: "652023210604",
-  appId: "1:652023210604:web:767527fac16f81686cee49"
-};
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
-const messaging = firebase.messaging();
-
-navigator.serviceWorker.register("/family/firebase-messaging-sw.js").then((registration) => {
-  messaging.getToken({
-    vapidKey: "BMXlK5u4ENO70wyQvDzNeq9vcWEuM7Bowm8dQYgObTstxsNwQHL1bunsJp1WprULju5rLg17fPJfedoptwQ2qWI",
-    serviceWorkerRegistration: registration
-  }).then((token) => {
-    window.currentToken = token;
-    console.log("token:", token);
-    import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-database.js"; //רישום טוקן ב-Database 2 שורות
-set(ref(db, 'tokens/' + token), true);
-
-  }).catch((err) => {
-    console.error("שגיאה בקבלת טוקן", err);
-  });
-}).catch((err) => {
-  console.error("שגיאה ברישום service worker", err);
-});
-
-function register() {
-  Notification.requestPermission().then((permission) => {
-    if (permission !== "granted") {
-      alert("יש לאשר הרשאת התראות");
-      return;
-    }
-    if (!window.currentToken) {
-      alert("לא התקבל טוקן עדיין");
-      return;
-    }
-    db.collection("tokens").doc(window.currentToken).get().then((doc) => {
-      if (doc.exists) {
-        alert("כבר נרשמת ✅");
-      } else {
-        db.collection("tokens").doc(window.currentToken).set({
-          token: window.currentToken,
-          topic: "all",
-          timestamp: firebase.firestore.FieldValue.serverTimestamp()
-        }).then(() => {
-          alert("נרשמת בהצלחה ✅");
-        });
-      }
-    });
-  });
-}
-</script>
+  <h2>הרשמה להתראות פוש</h2>
+  <p>קבלו עדכונים מהמשפחה ישירות לטלפון שלכם!</p>
+  <button id="registerBtn">הירשם עכשיו</button>
 </body>
 </html>
